@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Favourite Songs</string>
+    <string name="my_music">Η μουσική μου</string>
+    <string name="favorites">Αγαπημένα τραγούδια</string>
+    <string name="playlists">οι λίστες μου</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="MyMusic">Η Μουσική μου</string>
+    <string name="favorite_songs">favorite songs</string>
+    <string name="my_playlist">My Playlist</string>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <!-- Set your button color here -->
+    <size
+        android:width="60dp"
+        android:height="60dp" /> <!-- Set your desired size here -->
+    <path android:fillColor="@android:color/white" android:pathData="M8,5v14l11,-7z"/>
+
+</shape>

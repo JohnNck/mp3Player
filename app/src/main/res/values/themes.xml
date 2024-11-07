@@ -1,0 +1,10 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.AgapimenaTragoudia" parent="Theme.Material3.DayNight.NoActionBar">
+         <item name="colorPrimary">#BEDA1734</item>
+        <item name="colorSecondary">#FF2087A3</item>
+        <item name="buttonTint">@color/white</item>
+    </style>
+
+    <style name="Theme.AgapimenaTragoudia" parent="Base.Theme.AgapimenaTragoudia" />
+</resources>
