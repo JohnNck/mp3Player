@@ -30,8 +30,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.miHome -> setCurrentFragment(homeFragment)
-                R.id.miFavorites -> setCurrentFragment(favoritesFragment)
-            }
+                }
             true
         }
 

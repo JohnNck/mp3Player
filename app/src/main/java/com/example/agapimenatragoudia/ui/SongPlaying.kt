@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -33,6 +34,10 @@ class SongPlaying : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_music_playing)
 
+        val backArrow: ImageView = findViewById(R.id.backArrow)
+        backArrow.setOnClickListener {
+            onBackPressed()
+        }
 
         songViewModel = ViewModelProvider(this)[SongViewModel::class.java]
         songViewModel.allSongs.observe(this, Observer { songs ->
@@ -41,6 +46,7 @@ class SongPlaying : AppCompatActivity() {
                 Log.d("HomeFragment", "Song: ${it.title}, ${it.artist}")
             }
         })
+
         seekBar = findViewById(R.id.SbClaping)
         handler = Handler(Looper.getMainLooper())
 
@@ -57,11 +63,12 @@ class SongPlaying : AppCompatActivity() {
         val artist = findViewById<TextView>(R.id.tvSongArtist)
         val nextSong = findViewById<FloatingActionButton>(R.id.nextTrack)
         val previousSong = findViewById<FloatingActionButton>(R.id.previousTrack)
+
         title.text = songTitle
         artist.text = songArtist
         fbPlay.setBackgroundColor(Color.TRANSPARENT)
         stopSong(fbPlay)
-        playPauseSong(songPath,fbPlay)
+        playPauseSong(songPath, fbPlay)
 
         fbPlay.setOnClickListener {
             playPauseSong(songPath, fbPlay)
@@ -70,6 +77,7 @@ class SongPlaying : AppCompatActivity() {
         fbStop.setOnClickListener {
             stopSong(fbPlay)
         }
+
         currentSongIndex = intent.getIntExtra("SONG_INDEX", -1)
         songsList = intent.getSerializableExtra("SONG_LIST") as ArrayList<SongEntity>
 
@@ -91,6 +99,7 @@ class SongPlaying : AppCompatActivity() {
                 playPauseSong(newSong.path, fbPlay)
             }
         }
+
         previousSong.setOnClickListener {
             val previousSong = songViewModel.previousTrack()
             if (previousSong != null) {
@@ -98,42 +107,36 @@ class SongPlaying : AppCompatActivity() {
                 songArtist = previousSong.artist
                 songPath = previousSong.path
                 stopSong(fbPlay)
-                playPauseSong(previousSong.path,fbPlay)
+                playPauseSong(previousSong.path, fbPlay)
             }
-
-            }
+        }
 
         songViewModel.nextSong.observe(this) { song ->
             if (song != null) {
                 stopSong(fbPlay)
-
                 title.text = songViewModel.nextSong.value?.title
                 artist.text = songViewModel.nextSong.value?.artist
-
-                 stopSong(fbPlay)
                 playPauseSong(songViewModel.nextSong.value?.path, fbPlay)
             }
         }
+
         songViewModel.previousSong.observe(this) { song ->
             if (song != null) {
                 stopSong(fbPlay)
-
                 title.text = songViewModel.previousSong.value?.title
                 artist.text = songViewModel.previousSong.value?.artist
-
-               stopSong(fbPlay)
                 playPauseSong(songViewModel.previousSong.value?.path, fbPlay)
             }
         }
+
         songViewModel.repeatMode.observe(this) { mode ->
             handleRepeatMode(mode)
         }
 
-       findViewById<FloatingActionButton>(R.id.fabRepeat).setOnClickListener {
+        findViewById<FloatingActionButton>(R.id.fabRepeat).setOnClickListener {
             toggleRepeatMode()
         }
     }
-
 
     override fun onBackPressed() {
         super.onBackPressed()
@@ -217,6 +220,7 @@ class SongPlaying : AppCompatActivity() {
             handler.postDelayed(runnable!!, 1000)
         }
     }
+
     private fun toggleRepeatMode() {
         val newMode = when (songViewModel.repeatMode.value) {
             NO_REPEAT -> REPEAT_ONE
@@ -227,6 +231,7 @@ class SongPlaying : AppCompatActivity() {
         songViewModel.setRepeatMode(newMode)
         updateRepeatButtonUI(newMode)
     }
+
     private fun updateRepeatButtonUI(mode: SongViewModel.RepeatMode) {
         val repeatButton = findViewById<FloatingActionButton>(R.id.fabRepeat)
         when (mode) {
@@ -235,9 +240,11 @@ class SongPlaying : AppCompatActivity() {
             REPEAT_ALL -> repeatButton.setImageResource(R.drawable.baseline_repeat_on_24)
         }
     }
+
     private fun handleRepeatMode(mode: SongViewModel.RepeatMode) {
-       updateRepeatButtonUI(mode)
+        updateRepeatButtonUI(mode)
     }
+
     private fun handleSongCompletion(fbPlay: FloatingActionButton) {
         when (songViewModel.repeatMode.value) {
             REPEAT_ONE -> {
@@ -247,23 +254,18 @@ class SongPlaying : AppCompatActivity() {
             REPEAT_ALL -> {
                 currentSongIndex = (currentSongIndex + 1) % songsList.size
                 val newSong = songsList[currentSongIndex]
-
-                val songTitle = newSong.title
-                val songArtist = newSong.artist
-                val songPath = newSong.path
-
-                findViewById<TextView>(R.id.tvSongTitle).text = songTitle
-                findViewById<TextView>(R.id.tvSongArtist).text = songArtist
-
+                findViewById<TextView>(R.id.tvSongTitle).text = newSong.title
+                findViewById<TextView>(R.id.tvSongArtist).text = newSong.artist
                 stopSong(fbPlay)
-                playPauseSong(songPath, fbPlay)
+                playPauseSong(newSong.path, fbPlay)
             }
             else -> {
                 onSongFinish(fbPlay)
             }
         }
     }
-    private fun onSongFinish(fbPlay: FloatingActionButton){
+
+    private fun onSongFinish(fbPlay: FloatingActionButton) {
         mediaPlayer?.seekTo(0)
         seekBar.progress = 0
         fbPlay.setImageResource(R.drawable.ic_play_arrow)

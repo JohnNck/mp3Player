@@ -5,10 +5,4 @@
         android:id="@+id/miHome"
         android:icon="@drawable/baseline_headset_24"
         android:title="@string/my_music" />
-    <item
-        android:id="@+id/miFavorites"
-        android:icon="@drawable/baseline_star_24"
-        android:title="@string/favorites"
-        android:iconTint="#F5DA25"
-        />
 </menu>
